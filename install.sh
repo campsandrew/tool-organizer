@@ -7,10 +7,11 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 if [ ! -d $HOME/bin ]
 then
     mkdir $HOME/bin
+    mkdir $HOME/bin/tool-organizer
 fi
 
 # Move source directory to install path
-cp -r $DIR $HOME/bin
+cp -r $DIR/* $HOME/bin/tool-organizer
 chmod +x $HOME/bin/tool-organizer/torg
 
 # Add tool path to .bash_profile or .bashrc

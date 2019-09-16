@@ -32,7 +32,7 @@ class CommandBar(FRAME):
         new_widget(root, super(), **kwargs)
 
         # Add children to main frame
-        s_cmd_entry = {"pack": {"fill": "x"}, "default": self.COMMAND_DEFAULT_TEXT}
+        s_cmd_entry = {"pack": {"fill": "x", "pady": (0, 5)}, "default": self.COMMAND_DEFAULT_TEXT}
         self._cmd_entry = ResponsiveEntry(self, **s_cmd_entry)
         self._add_actions()
 
@@ -68,11 +68,8 @@ class CommandBar(FRAME):
         if btn_text == self.CLEAR_TEXT:
             self._cmd_entry.clear()
         elif btn_text == self.RUN_TEXT and not no_cmd:
-            # TODO: check with operation system and do specific terminal command
-            os.system("osascript -e '\ntell application \"Terminal\"\n do script \"" + cmd + "\"\n activate\n end tell'")
-            #os.system("osascript -e \"tell application \"Terminal\" to do script \"ls\"\"")
-            #os.system("open -a Terminal --args 'ls'") #--args " + cmd)
-            #os.system("open -a iTerm -n -e /bin/bash -c \"" + cmd + "; exec /bin/bash\"")
+            t_cmd = self._config.get_terminal_command()
+            os.system(t_cmd.format(cmd))
         elif btn_text == self.SAVE_TEXT and not no_cmd:
             #TODO: Create popup to pick save location
             pass
