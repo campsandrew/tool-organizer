@@ -34,6 +34,7 @@ class CommandBar(FRAME):
         # Add children to main frame
         s_cmd_entry = {"pack": {"fill": "x", "pady": (0, 5)}, "default": self.COMMAND_DEFAULT_TEXT}
         self._cmd_entry = ResponsiveEntry(self, **s_cmd_entry)
+        self._cmd_entry.focus()
         self._add_actions()
 
         # Add event bindings

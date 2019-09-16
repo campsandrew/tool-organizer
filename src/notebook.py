@@ -8,6 +8,10 @@ from util import new_widget
 
 # Constant Defintions
 NOTEBOOK = tkinter.ttk.Notebook
+SAVED_TAB = "Saved"
+HISTORY_TAB = "History"
+DOC_TAB = "Documentation"
+DEFAULT_TABS = [SAVED_TAB, HISTORY_TAB, DOC_TAB]
 
 class Notebook(NOTEBOOK):
 
@@ -22,7 +26,7 @@ class Notebook(NOTEBOOK):
         new_widget(root, super(), **kwargs)
 
         # Add tabs to notebook
-        for tab in self._config.get_tab_names():
+        for tab in self._config.get_tab_names() + DEFAULT_TABS:
             self._tabs[tab] = Tab(self, **kwargs)
             self.add(self._tabs[tab], text=tab)
         

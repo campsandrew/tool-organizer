@@ -46,10 +46,6 @@ class Configuration:
         for tab in self._conf.user_defined_tabs:
             tabs.append(tab.tab_name)
 
-        # Get all default tab names
-        for tab in self._conf.default_tabs:
-            tabs.append(tab)
-
         return tabs
 
     def get_terminal_command(self):
@@ -69,17 +65,15 @@ class Configuration:
             "filepath": filepath,
             "os": {
                 "darwin": {
-                "terminal_command": "osascript -e '\ntell application \"Terminal\"\n do script \"{}\"\n activate\n end tell'"
+                    "terminal_command": "osascript -e '\ntell application \"Terminal\"\n do script \"{}\"\n activate\n end tell'"
                 },
                 "linux": {
-                "terminal_command": "knosole --hold -e /bin/bash -c \"{}; exec /bin/bash\""
+                    "terminal_command": "knosole --hold -e /bin/bash -c \"{}; exec /bin/bash\""
                 }
             },
-            "default_tabs": ["Saved", "History", "Documentation"],
             "user_defined_tabs": []
         }
 
-        #TODO: remove default_tabs name
         #TODO: add all os systems into default config
         #TODO: create page to configure operating system commands
 
