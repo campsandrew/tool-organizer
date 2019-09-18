@@ -86,6 +86,17 @@ class Configuration:
     def read_doc_file(self):
         return self._doc.documentation
 
+    def add_user_tab(self, tab_name):
+        self._conf.user_defined_tabs.append({
+            "tab_name": tab_name,
+            "tools": []
+        })
+
+        # Save tab information to config file
+        dump_json(self._conf.filepath, self._conf)
+
+        return None
+
     @staticmethod
     def _gen_conf_file(filepath):
         conf = {

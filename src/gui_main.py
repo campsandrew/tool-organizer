@@ -48,7 +48,7 @@ class GUIMain(TK):
 
     def _new_tab(self):
 
-        #self._notebook.add_tool_tab()
+        self._notebook.add_tool_tab("POPUP TODO")
 
         return None
     
