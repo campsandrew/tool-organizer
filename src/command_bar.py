@@ -33,8 +33,10 @@ class CommandBar(FRAME):
         # Create main frame
         new_widget(root, super(), **kwargs)
 
+        #TODO: make entry wrap. Need to switch this to Text entry
         # Add children to main frame
-        s_cmd_entry = {"pack": {"fill": "x", "pady": (0, 5)}, "default": self.COMMAND_DEFAULT_TEXT}
+        s_cmd_entry = {"pack": {"fill": "x", "pady": (0, 5)}, 
+                       "default": self.COMMAND_DEFAULT_TEXT}
         self._cmd_entry = ResponsiveEntry(self, **s_cmd_entry)
         self._cmd_entry.focus()
         self._add_actions()
@@ -84,6 +86,7 @@ class CommandBar(FRAME):
         if btn_text == self.CLEAR_TEXT:
             self._cmd_entry.clear()
         elif btn_text == self.RUN_TEXT and not no_cmd:
+            self.configuration.add_history(cmd)
             t_cmd = self.configuration.get_terminal_command()
             os.system(t_cmd.format(cmd))
         elif btn_text == self.SAVE_TEXT and not no_cmd:

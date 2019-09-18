@@ -12,7 +12,9 @@ __version__ = "1.0.0"
 NAME = "Tool Organizer - v" + __version__
 
 # TODO: Make tool settings have collapsable label frames
-# TODO: Make text entry for commands wrap 
+# TODO: Make text entry for commands wrap
+# TODO: History tab showing scrollable table with command and time command was run.
+# TODO: Make table have a filterable columns ording by date/search
 
 def main():
 

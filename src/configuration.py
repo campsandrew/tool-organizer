@@ -1,5 +1,6 @@
 import os
 import sys
+import datetime
 
 # Local File Imports
 from map import Map
@@ -85,6 +86,26 @@ class Configuration:
 
     def read_doc_file(self):
         return self._doc.documentation
+
+    def add_history(self, command):
+        date = datetime.date.today().strftime("%Y/%m/%d")
+        time = datetime.datetime.now().strftime("%H:%M")
+        command_tup = (command, time)
+
+        # Determining if date exists in history or not
+        if self._hist.history and date == self._hist.history[0].date:
+            self._hist.history[0].commands.insert(0, command_tup)
+        else:
+            new_date = Map({
+                "date": date,
+                "commands": [command_tup]
+            })
+            self._hist.history.insert(0, new_date)
+
+        # Save history information to history file
+        dump_json(self._hist.filepath, self._hist)
+        
+        return None
 
     def add_user_tab(self, tab_name):
         self._conf.user_defined_tabs.append({

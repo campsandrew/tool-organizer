@@ -23,7 +23,6 @@ class Tab(FRAME):
         self._edit_save_btn = None
 
         # Create frame widget
-
         new_widget(root, super(), **kwargs)
 
         # Create specific tab based on tab key
