@@ -43,10 +43,10 @@ class ResponsiveEntry(ENTRY):
         # Perform FocusIn vs FocusOut conditions
         if str(event.type) == "FocusIn" and is_default:
             self["style"] = "Command.TEntry"
-            self.delete(0, "end")
+            self.delete(0, tkinter.END)
         elif str(event.type) == "FocusOut" and no_text:
             self["style"] = "CommandDefault.TEntry"
-            self.insert(0, self._default)
+            self.insert(tkinter.INSERT, self._default)
         else: pass
 
         return None
@@ -56,7 +56,7 @@ class ResponsiveEntry(ENTRY):
         # Send cursor to entry and delete
         self["style"] = "Command.TEntry"
         self.focus()
-        self.delete(0, "end")
+        self.delete(0, tkinter.END)
 
         return None
 
