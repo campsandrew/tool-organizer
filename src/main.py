@@ -11,6 +11,9 @@ __version__ = "1.0.0"
 
 NAME = "Tool Organizer - v" + __version__
 
+# TODO: Make tool settings have collapsable label frames
+# TODO: Make text entry for commands wrap 
+
 def main():
 
     # Initialize configuration

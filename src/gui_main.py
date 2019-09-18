@@ -3,6 +3,7 @@ import tkinter
 import tkinter.ttk
 
 # Local Imports
+from map import Map
 from notebook import Notebook
 from command_bar import CommandBar
 
@@ -11,19 +12,24 @@ TK = tkinter.Tk
 
 class GUIMain(TK):
 
-    def __new__(cls, config, name):
+    def __new__(cls, configuration, name):
         return super().__new__(cls)
 
     def __init__(self, config, name):
         super().__init__()
+
+        # Initialize class variables
+        self.configuration = config
+        self.var_map = self._init_vars()
+        self._menu = tkinter.Menu(self)
+        self._notebook = None
+        self._cmd_bar = None
 
         # Root configuration
         self.title(name)
         self.geometry("900x700")
 
         # Configure menu bar on root
-        self._config = config
-        self._menu = tkinter.Menu(self)
         self.config(menu=self._menu)
         self.protocol("WM_DELETE_WINDOW", self._on_close)
 
@@ -32,6 +38,27 @@ class GUIMain(TK):
     # TODO: Look into this further
     def __call__(self):
         return self
+
+    def _init_vars(self):
+        tvars = Map({
+            "filepath": tkinter.StringVar()
+        })
+
+        return tvars
+
+    def _new_tab(self):
+
+        #self._notebook.add_tool_tab()
+
+        return None
+    
+    def _on_close(self):
+        # TODO: write command history to config file
+
+        # Kill root window
+        self.destroy()
+
+        return None
 
     def execute(self):
 
@@ -50,19 +77,5 @@ class GUIMain(TK):
 
         # Start GUI
         self.mainloop()
-
-        return None
-
-    def _new_tab(self):
-
-        self._notebook.add_tool_tab()
-
-        return None
-    
-    def _on_close(self):
-        # TODO: write command history to config file
-
-        # Kill root window
-        self.destroy()
 
         return None

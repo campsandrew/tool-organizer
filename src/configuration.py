@@ -6,11 +6,16 @@ from map import Map
 from util import load_json
 from util import dump_json
 
+# Constants
+SAVED_TAB = "Saved"
+HISTORY_TAB = "History"
+DOC_TAB = "Documentation"
 HOME = os.path.expanduser("~")
 TORG_CONF_PATH = os.path.join(HOME, ".torg")
 TORG_DOC_FILE = os.path.join(TORG_CONF_PATH, "torg.doc")
 TORG_HIST_FILE = os.path.join(TORG_CONF_PATH, "torg.hist")
 TORG_CONF_FILE = os.path.join(TORG_CONF_PATH, "torg.conf")
+DEFAULT_TABS = [SAVED_TAB, HISTORY_TAB, DOC_TAB]
 
 class Configuration:
 
@@ -46,7 +51,7 @@ class Configuration:
         for tab in self._conf.user_defined_tabs:
             tabs.append(tab.tab_name)
 
-        return tabs
+        return tabs + DEFAULT_TABS
 
     def get_terminal_command(self):
         t_cmd = None
@@ -58,6 +63,17 @@ class Configuration:
         else: pass
 
         return t_cmd
+
+    def get_filepath(self, key):
+        filepath = ""
+
+        # Return filepath for particular configuration file
+        if key == DOC_TAB: filepath = self._doc.filepath
+        elif key == HISTORY_TAB: filepath = self._hist.filepath
+        elif key == SAVED_TAB: filepath = self._conf.filepath
+        else: filepath = self._conf.filepath
+
+        return filepath
 
     @staticmethod
     def _gen_conf_file(filepath):
