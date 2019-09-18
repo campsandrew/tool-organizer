@@ -97,6 +97,19 @@ class Configuration:
 
         return None
 
+    def delete_user_tab(self, tab_key):
+
+        # Loop to find tab_key that matches and delete
+        for i, tab in enumerate(self._conf.user_defined_tabs):
+            if tab.tab_name == tab_key:
+                del self._conf.user_defined_tabs[i]
+                break
+
+        # Save tab information to config file
+        dump_json(self._conf.filepath, self._conf)
+
+        return None
+
     @staticmethod
     def _gen_conf_file(filepath):
         conf = {

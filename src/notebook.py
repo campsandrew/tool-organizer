@@ -54,8 +54,7 @@ class Notebook(NOTEBOOK):
 
             # Create menu
             popup_menu = tkinter.Menu(self, tearoff=0)
-            popup_menu.add_command(label="Delete", 
-                                   command=self.forget(self.select()))
+            popup_menu.add_command(label="Delete", command=self._on_tab_delete)
 
             # Cause menu to popup
             try:
@@ -64,6 +63,16 @@ class Notebook(NOTEBOOK):
                 popup_menu.grab_release()
 
         return None
+
+    def _on_tab_delete(self):
+        tab_key = self.select()
+
+        # Remove from Notebook and configuration file
+        self.configuration.delete_user_tab(self.tab(tab_key, "text"))
+        self.forget(tab_key)
+
+        return None
+
 
     def add_tool_tab(self, tab_key):
         s_tab = {"pack": {"expand": True, "fill": "both"}}
