@@ -28,10 +28,10 @@ class Notebook(NOTEBOOK):
             self.add(self._tabs[tab], text=tab)
 
             # Add right click binding to user defined tabs only
-            if tab not in self.configuration.DEFAULT_TABS:
-                self.bind("<Button-2>", self._on_right_click)
+            # if tab not in self.configuration.DEFAULT_TABS:
 
         # Add event bindings
+        self.bind("<Button-2>", self._on_right_click)
         self.bind("<<NotebookTabChanged>>", self._on_tab_change)
         
         return None
@@ -73,7 +73,6 @@ class Notebook(NOTEBOOK):
 
         return None
 
-
     def add_tool_tab(self, tab_key):
         s_tab = {"pack": {"expand": True, "fill": "both"}}
         self._tabs[tab_key] = Tab(self, tab_key, **s_tab)
@@ -82,6 +81,6 @@ class Notebook(NOTEBOOK):
         self.configuration.add_user_tab(tab_key)
 
         # Binds right click to create menu popup
-        self.bind("<Button-2>", self._on_right_click)
+        #self.bind("<Button-2>", self._on_right_click)
 
         return None

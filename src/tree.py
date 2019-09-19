@@ -33,7 +33,30 @@ class Tree(TREEVIEW):
         self.heading("#0", text=heading) # TODO: this is where to add heading click event to sort data
         self._add_verticle_scroll()
 
+        # Tree bindings
+        self.bind("<Button-2>", self._on_right_click)
+
         return None
+
+    # TODO: implement this code to make popup
+    # def init(self):
+    #     """initialise dialog"""
+    #     # Button-3 is right click on windows
+    #     self.tree.bind("<Button-3>", self.popup)
+
+    # def popup(self, event):
+    #     """action in event of button 3 on tree view"""
+    #     # select row under mouse
+    #     iid = self.tree.identify_row(event.y)
+    #     if iid:
+    #         # mouse pointer over item
+    #         self.tree.selection_set(iid)
+    #         self.contextMenu.post(event.x_root, event.y_root)            
+    #     else:
+    #         # mouse pointer not over item
+    #         # occurs when items do not fill frame
+    #         # no action required
+    #         pass
 
     def _add_verticle_scroll(self):
         s_scroll = {"pack": {"side": "right", "fill": "y"},
