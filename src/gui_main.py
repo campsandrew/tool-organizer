@@ -53,7 +53,6 @@ class GUIMain(TK):
         return None
     
     def _on_close(self):
-        # TODO: write command history to config file
 
         # Kill root window
         self.destroy()

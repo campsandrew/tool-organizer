@@ -87,6 +87,9 @@ class Configuration:
     def read_doc_file(self):
         return self._doc.documentation
 
+    def get_history_dates(self):
+        return [hist.date for hist in self._hist.history]
+
     def add_history(self, command):
         date = datetime.date.today().strftime("%Y/%m/%d")
         time = datetime.datetime.now().strftime("%H:%M")

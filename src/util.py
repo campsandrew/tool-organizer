@@ -1,42 +1,44 @@
-import os
 import sys
 import json
 import inspect
 
-# import tkinter
-# import tkinter.ttk
-
-# FRM = tkinter.ttk.Frame
-# NB = tkinter.ttk.Notebook
-# ST = tkinter.scrolledtext.ScrolledText
-# TV = tkinter.ttk.Treeview
-# BTN = tkinter.ttk.Button
-# ENT = tkinter.ttk.Entry
 # LB = tkinter.ttk.Label
 # SBX = tkinter.ttk.Spinbox
 
-# def add_notebook(root, tabs):
-#   pages = {}
+def load_json(filepath):
 
-#   # Define Notebook
-#   s_nb = {"pack": {"expand": True, "fill": "both", "pady": 5}}
-#   nb = add_widget(root, NB, **s_nb)
+    # Opening config file and reading json
+    with open(filepath) as cfile:
+        config = json.load(cfile)
 
-#   # Add all tabs to notebook
-#   for tab in tabs:
-#     pages[tab] = add_widget(nb, FRM, **s_nb)
-#     nb.add(pages[tab], text=tab)
+    return config
 
-#   return nb, pages
+def dump_json(filepath, data):
 
-# def add_treeview(root):
+    # Creates file and writes json content
+    with open(filepath, "w") as cfile:
+        json.dump(data, cfile, indent=4)
 
-#     s_tv = {"pack": {"side": "left", "fill": "y"}, "show": "tree",
-#             "selectmode": "browse"}
-#     tree = add_widget(root, TV, **s_tv)
-#     tree.column("#0", width=100)
+    return None
 
-#     return tree
+def new_widget(root, widget, **kw):
+    if "pack" in kw: pack = kw.pop("pack")
+    else: pack = {}
+    if "grid" in kw: grid = kw.pop("grid")
+    else: grid = {}
+
+    # Create Widget
+    if inspect.isclass(widget):
+        wdgt = widget(root, **kw)
+    else:
+        widget.__init__(root, **kw)
+        wdgt = widget
+
+    # Widget Layout Configuration
+    if pack: wdgt.pack(**pack)
+    if grid: wdgt.grid(**grid)
+
+    return wdgt
 
 # def link_hover_enter(link):
 #     link["font"] = ("Courier", 10, "underline", "bold")
@@ -55,22 +57,6 @@ import inspect
 #         widget.destroy()
 
 #     return None
-
-def load_json(filepath):
-
-    # Opening config file and reading json
-    with open(filepath) as cfile:
-        config = json.load(cfile)
-
-    return config
-
-def dump_json(filepath, data):
-
-    # Creates file and writes json content
-    with open(filepath, "w") as cfile:
-        json.dump(data, cfile, indent=4)
-
-    return None
 
 # def open_browser(url):
 
@@ -102,22 +88,3 @@ def dump_json(filepath, data):
 #         root.grid_columnconfigure(column, weight=1)
 
 #     return None
-
-def new_widget(root, widget, **kw):
-    if "pack" in kw: pack = kw.pop("pack")
-    else: pack = {}
-    if "grid" in kw: grid = kw.pop("grid")
-    else: grid = {}
-
-    # Create Widget
-    if inspect.isclass(widget):
-        wdgt = widget(root, **kw)
-    else:
-        widget.__init__(root, **kw)
-        wdgt = widget
-
-    # Widget Layout Configuration
-    if pack: wdgt.pack(**pack)
-    if grid: wdgt.grid(**grid)
-
-    return wdgt
