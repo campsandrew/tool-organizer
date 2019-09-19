@@ -41,6 +41,8 @@ class Tab(FRAME):
         return None
 
     def _create_history_tab(self):
+        
+
         return None
 
     def _create_doc_tab(self):
