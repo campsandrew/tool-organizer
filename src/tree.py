@@ -34,16 +34,11 @@ class Tree(TREEVIEW):
         self._add_verticle_scroll()
 
         # Tree bindings
-        #self.bind("<Button-2>", self._on_right_click)
+        self.bind("<Button-2>", self._on_right_click)
 
         return None
 
     # TODO: implement this code to make popup
-    # def init(self):
-    #     """initialise dialog"""
-    #     # Button-3 is right click on windows
-    #     self.tree.bind("<Button-3>", self.popup)
-
     # def popup(self, event):
     #     """action in event of button 3 on tree view"""
     #     # select row under mouse
@@ -63,6 +58,19 @@ class Tree(TREEVIEW):
                     "orient": "vertical", "command": self.yview}
         v_scroll = new_widget(self._tree_frm, SCROLLBAR, **s_scroll)
         self.configure(yscrollcommand=v_scroll.set)
+
+        return None
+
+    def _on_right_click(self, event):
+        item = self.identify_row(event.y)
+
+        # If user right clicked on a tree item
+        if item:
+            self.selection_set(item)
+            # TODO: Add menu with delete and add button
+        else:
+            pass
+            # TODO: Add menu with just add button
 
         return None
 

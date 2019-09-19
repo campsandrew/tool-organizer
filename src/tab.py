@@ -39,6 +39,9 @@ class Tab(FRAME):
 
         return None
 
+    def __call__(self):
+        return self
+
     def _doc_edit(self):
 
         # Alternate edit/save button text on click
