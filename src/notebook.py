@@ -46,9 +46,10 @@ class Notebook(NOTEBOOK):
         if event.widget.identify(event.x, event.y) != "label":
             return None
 
-        index = event.widget.index("@{},{}".format(event.x, event.y))
-        cur_tab = event.widget.tab(index, "text")
-        self.select(event.widget.tabs()[index])
+        # Give tab focus if right clicked
+        index = self.index("@{},{}".format(event.x, event.y))
+        cur_tab = self.tab(index, "text")
+        self.select(self.tabs()[index])
 
         # Checks if tab can be deleted
         if cur_tab not in self.configuration.DEFAULT_TABS:
