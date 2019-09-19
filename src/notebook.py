@@ -27,9 +27,6 @@ class Notebook(NOTEBOOK):
             self._tabs[tab] = Tab(self, tab, **kwargs)
             self.add(self._tabs[tab], text=tab)
 
-            # Add right click binding to user defined tabs only
-            # if tab not in self.configuration.DEFAULT_TABS:
-
         # Add event bindings
         self.bind("<Button-2>", self._on_right_click)
         self.bind("<<NotebookTabChanged>>", self._on_tab_change)
@@ -44,13 +41,17 @@ class Notebook(NOTEBOOK):
         return None
 
     def _on_right_click(self, event):
-        tab_index = self.tk.call(self._w, "identify", "tab", event.x, event.y)
-        cur_index = self.index(self.select())
-        cur_tab = self.tab(self.select(), "text")
 
-        # Checks if tab is under focus and can be deleted
-        if cur_tab not in self.configuration.DEFAULT_TABS \
-           and tab_index == cur_index:
+        # Only create popup if on tab label
+        if event.widget.identify(event.x, event.y) != "label":
+            return None
+
+        index = event.widget.index("@{},{}".format(event.x, event.y))
+        cur_tab = event.widget.tab(index, "text")
+        self.select(event.widget.tabs()[index])
+
+        # Checks if tab can be deleted
+        if cur_tab not in self.configuration.DEFAULT_TABS:
 
             # Create menu
             popup_menu = tkinter.Menu(self, tearoff=0)
@@ -79,8 +80,5 @@ class Notebook(NOTEBOOK):
         self.add(self._tabs[tab_key], text=tab_key)
         self.select(self.tabs()[-1])
         self.configuration.add_user_tab(tab_key)
-
-        # Binds right click to create menu popup
-        #self.bind("<Button-2>", self._on_right_click)
 
         return None

@@ -34,7 +34,7 @@ class Tree(TREEVIEW):
         self._add_verticle_scroll()
 
         # Tree bindings
-        self.bind("<Button-2>", self._on_right_click)
+        #self.bind("<Button-2>", self._on_right_click)
 
         return None
 

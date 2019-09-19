@@ -111,10 +111,10 @@ class Configuration:
         return None
 
     def add_user_tab(self, tab_name):
-        self._conf.user_defined_tabs.append({
+        self._conf.user_defined_tabs.append(Map({
             "tab_name": tab_name,
             "tools": []
-        })
+        }))
 
         # Save tab information to config file
         dump_json(self._conf.filepath, self._conf)
