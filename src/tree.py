@@ -3,7 +3,7 @@ import tkinter
 import tkinter.ttk
 
 # Local import
-from util import new_widget
+from utils import new_widget
 
 # Constant Definitions
 MENU = tkinter.Menu
@@ -16,8 +16,10 @@ class Tree(TREEVIEW):
     def __new__(cls, *args, **kwargs):
         return super().__new__(cls)
 
-    def __init__(self, root, headings, ascending=True, width=100,
-                 addable=True, **kwargs):
+    def __init__(self, root, headings=("Ascending, Decending"), addable=True,
+                 ascending=True, width=150, selectmode="browse",
+                 show="tree headings", pack={"side": "left", "fill": "y"},
+                 **kwargs):
 
         # Class variable initialization
         self._root = root
@@ -28,15 +30,15 @@ class Tree(TREEVIEW):
         self.deleted = None
 
         # Create main frame to hold tree parts
-        s_tree_frm = {"pack": kwargs["pack"]}
-        self._tree_frm = new_widget(root, FRAME, **s_tree_frm)
+        self._tree_frm = new_widget(root, FRAME, **{"pack": pack})
 
         # Create tree widget
-        new_widget(self._tree_frm, super(), **kwargs)
+        options = {"pack": pack, "selectmode": selectmode, "show": show}
+        new_widget(self._tree_frm, super(), **options, **kwargs)
 
         # Tree width configuration
-        self.column("#0", width=width)
         self.heading("#0", text=headings[int(not self._order)])
+        self.column("#0", width=width)
         self._add_verticle_scroll()
 
         # Tree bindings

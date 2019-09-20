@@ -3,9 +3,9 @@ import sys
 import datetime
 
 # Local File Imports
-from map import Map
-from util import load_json
-from util import dump_json
+from utils import Map
+from utils import load_json
+from utils import dump_json
 
 # Constant Definitions
 HOME = os.path.expanduser("~")

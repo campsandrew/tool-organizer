@@ -4,7 +4,7 @@ import tkinter.ttk
 
 # Local Imports
 from tab import Tab
-from util import new_widget
+from utils import new_widget
 
 # Constant Defintions
 MENU = tkinter.Menu

@@ -3,7 +3,7 @@ import tkinter
 import tkinter.ttk
 
 # Local Imports
-from util import new_widget
+from utils import new_widget
 
 # Constant Definitions
 ENTRY = tkinter.ttk.Entry

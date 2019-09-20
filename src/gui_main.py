@@ -3,7 +3,7 @@ import tkinter
 import tkinter.ttk
 
 # Local Imports
-from map import Map
+from utils import Map
 from notebook import Notebook
 from command_bar import CommandBar
 

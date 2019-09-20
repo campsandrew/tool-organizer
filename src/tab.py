@@ -5,9 +5,9 @@ import tkinter.ttk
 import tkinter.scrolledtext
 
 # Local Imports
-from map import Map
+from utils import Map
 from tree import Tree
-from util import new_widget
+from utils import new_widget
 
 # Constant Defintions
 FRAME = tkinter.ttk.Frame
@@ -83,9 +83,7 @@ class Tab(FRAME):
     def _create_history_tab(self):
 
         # Adding tree to history tab
-        s_tree = {"pack": {"side": "left", "fill": "y"}, "width": 150,
-                  "headings": ("Latest", "Earliest"), "show": "tree headings",
-                  "selectmode": "browse", "addable": False}
+        s_tree = {"headings": ("Latest", "Earliest"), "addable": False}
         dates = self.configuration.get_history_dates()
         self._tree = Tree(self, **s_tree).add_items(dates)
 
