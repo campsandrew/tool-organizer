@@ -15,10 +15,7 @@ NAME = "Tool Organizer - v" + __version__
 # TODO: Make text entry for commands wrap
 # TODO: History tab showing scrollable table with command and time command was run.
 # TODO: Make table have a filterable columns ording by date/search
-# TODO: Right click and delete a history item
 # TODO: Add live updating history when a command is entered on history page
-# TODO: Add tab to front of tabs in tkinter
-# TODO: use tab_id to manage tabs
 
 def main():
 

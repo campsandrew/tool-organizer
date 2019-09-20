@@ -16,14 +16,15 @@ SCROLLED_TEXT = tkinter.scrolledtext.ScrolledText
 
 class Tab(FRAME):
 
-    def __init__(self, root, tab_key, **kwargs):
+    def __init__(self, root, tab_name, **kwargs):
 
         # Class variable initialization
         self._root = root
-        self._tab_key = tab_key
+        self._name = tab_name
+        self._tree = None
         self._scroll_text = None
         self._edit_save_btn = None
-        self._tree = None
+        self.tab_id = None
         self.var_map = root.var_map
         self.configuration = root.configuration
 
@@ -31,11 +32,11 @@ class Tab(FRAME):
         new_widget(root, super(), **kwargs)
 
         # Create specific tab based on tab key
-        if tab_key == self.configuration.DOC_TAB:
+        if tab_name == self.configuration.DOC_TAB:
             self._create_doc_tab()
-        elif tab_key == self.configuration.HISTORY_TAB:
+        elif tab_name == self.configuration.HISTORY_TAB:
             self._create_history_tab()
-        elif tab_key == self.configuration.SAVED_TAB:
+        elif tab_name == self.configuration.SAVED_TAB:
             self._create_saved_tab()
         else:
             self._create_tool_tab()

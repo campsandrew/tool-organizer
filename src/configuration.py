@@ -141,11 +141,11 @@ class Configuration:
 
         return None
 
-    def delete_user_tab(self, tab_key):
+    def delete_user_tab(self, tab_name):
 
-        # Loop to find tab_key that matches and delete
+        # Loop to find tab_name that matches and delete
         for i, tab in enumerate(self._conf.user_defined_tabs):
-            if tab.tab_name == tab_key:
+            if tab.tab_name == tab_name:
                 del self._conf.user_defined_tabs[i]
                 break
 
