@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import tkinter
 import tkinter.ttk
 
@@ -86,7 +87,8 @@ class CommandBar(FRAME):
         if btn_text == self.CLEAR_TEXT:
             self._cmd_entry.clear()
         elif btn_text == self.RUN_TEXT and not no_cmd:
-            self.configuration.add_history(cmd)
+            hist = self.configuration.add_history(cmd) # TODO: Need to stringify this and save in variable
+            self.var_map.new_history.set(json.dumps(hist))
             t_cmd = self.configuration.get_terminal_command()
             os.system(t_cmd.format(cmd))
         elif btn_text == self.SAVE_TEXT and not no_cmd:

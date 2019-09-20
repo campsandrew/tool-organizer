@@ -88,8 +88,15 @@ class Configuration:
         return self._doc.documentation
 
     def get_history_dates(self):
-        return [hist.date for hist in self._hist.history]
+        dates = [hist.date for hist in self._hist.history]
+        dates.sort(reverse=True)
 
+        return dates
+
+    """
+    Returns the json format history that the command
+    was inserted into
+    """
     def add_history(self, command):
         date = datetime.date.today().strftime("%Y/%m/%d")
         time = datetime.datetime.now().strftime("%H:%M")
@@ -108,7 +115,7 @@ class Configuration:
         # Save history information to history file
         dump_json(self._hist.filepath, self._hist)
         
-        return None
+        return self._hist.history[0]
 
     def add_user_tab(self, tab_name):
         self._conf.user_defined_tabs.append(Map({
@@ -118,6 +125,19 @@ class Configuration:
 
         # Save tab information to config file
         dump_json(self._conf.filepath, self._conf)
+
+        return None
+
+    def delete_history_date(self, date):
+
+        # Loop through all history dates and delete matching date
+        for i, hist in enumerate(self._hist.history):
+            if hist.date == date:
+                del self._hist.history[i]
+                break
+
+        # Save history information to history file
+        dump_json(self._hist.filepath, self._hist)
 
         return None
 

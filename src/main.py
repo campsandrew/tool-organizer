@@ -17,8 +17,8 @@ NAME = "Tool Organizer - v" + __version__
 # TODO: Make table have a filterable columns ording by date/search
 # TODO: Right click and delete a history item
 # TODO: Add live updating history when a command is entered on history page
-# TODO: Add heading click event to sort data in history tree
 # TODO: Add tab to front of tabs in tkinter
+# TODO: use tab_id to manage tabs
 
 def main():
 

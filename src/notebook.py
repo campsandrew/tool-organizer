@@ -7,6 +7,7 @@ from tab import Tab
 from util import new_widget
 
 # Constant Defintions
+MENU = tkinter.Menu
 NOTEBOOK = tkinter.ttk.Notebook
 
 class Notebook(NOTEBOOK):
@@ -55,7 +56,7 @@ class Notebook(NOTEBOOK):
         if cur_tab not in self.configuration.DEFAULT_TABS:
 
             # Create menu
-            popup_menu = tkinter.Menu(self, tearoff=0)
+            popup_menu = new_widget(self, MENU, **{"tearoff": 0})
             popup_menu.add_command(label="Delete", command=self._on_tab_delete)
 
             # Cause menu to popup

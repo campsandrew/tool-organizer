@@ -35,14 +35,18 @@ class GUIMain(TK):
 
         return None
 
-    # TODO: Look into this further
     def __call__(self):
         return self
 
     def _init_vars(self):
         tvars = Map({
-            "filepath": tkinter.StringVar()
+            "filepath": tkinter.StringVar(),
+            "new_history": tkinter.StringVar()
         })
+
+        # Variable initializations
+        tvars.filepath.set("")
+        tvars.new_history.set("")
 
         return tvars
 

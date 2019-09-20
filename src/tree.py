@@ -6,6 +6,7 @@ import tkinter.ttk
 from util import new_widget
 
 # Constant Definitions
+MENU = tkinter.Menu
 FRAME = tkinter.ttk.Frame
 TREEVIEW = tkinter.ttk.Treeview
 SCROLLBAR = tkinter.ttk.Scrollbar
@@ -15,11 +16,16 @@ class Tree(TREEVIEW):
     def __new__(cls, *args, **kwargs):
         return super().__new__(cls)
 
-    def __init__(self, root, heading, width=100, **kwargs):
+    def __init__(self, root, headings, ascending=True, width=100,
+                 addable=True, **kwargs):
 
         # Class variable initialization
         self._root = root
+        self._order = ascending
+        self._addable = addable
+        self._headings = headings
         self.configuration = root.configuration
+        self.deleted = None
 
         # Create main frame to hold tree parts
         s_tree_frm = {"pack": kwargs["pack"]}
@@ -30,28 +36,17 @@ class Tree(TREEVIEW):
 
         # Tree width configuration
         self.column("#0", width=width)
-        self.heading("#0", text=heading) # TODO: this is where to add heading click event to sort data
+        self.heading("#0", text=headings[int(not self._order)])
         self._add_verticle_scroll()
 
         # Tree bindings
+        self.bind("<Button-1>", self._on_click)
         self.bind("<Button-2>", self._on_right_click)
 
         return None
 
-    # TODO: implement this code to make popup
-    # def popup(self, event):
-    #     """action in event of button 3 on tree view"""
-    #     # select row under mouse
-    #     iid = self.tree.identify_row(event.y)
-    #     if iid:
-    #         # mouse pointer over item
-    #         self.tree.selection_set(iid)
-    #         self.contextMenu.post(event.x_root, event.y_root)            
-    #     else:
-    #         # mouse pointer not over item
-    #         # occurs when items do not fill frame
-    #         # no action required
-    #         pass
+    def __contains__(self, item):
+        return item in self.get_children()
 
     def _add_verticle_scroll(self):
         s_scroll = {"pack": {"side": "right", "fill": "y"},
@@ -61,16 +56,48 @@ class Tree(TREEVIEW):
 
         return None
 
+    def _on_click(self, event):
+        region = self.identify("region", event.x, event.y)
+
+        # Sort tree if heading is clicked
+        if region == "heading":
+            self.sort()
+
+        return None
+
     def _on_right_click(self, event):
+        popup_menu = new_widget(self, MENU, **{"tearoff": 0})
         item = self.identify_row(event.y)
 
+        # Create add menu button if tree can be added to by user
+        if self._addable:
+            popup_menu.add_command(label="Add", command=self._on_item_add)
+        
         # If user right clicked on a tree item
         if item:
+            popup_menu.add_command(label="Delete", command=self._on_item_delete)
             self.selection_set(item)
-            # TODO: Add menu with delete and add button
-        else:
-            pass
-            # TODO: Add menu with just add button
+            self.focus(item)
+
+        # Cause menu to popup
+        try:
+            popup_menu.tk_popup(event.x_root, event.y_root + 30, 0)
+        finally:
+            popup_menu.grab_release()
+
+        return None
+
+    def _on_item_add(self):
+        # TODO: figure out how this will work
+        
+        return None
+
+    # TODO: this needs to be implemented one level up (tab specific)
+    def _on_item_delete(self):
+        item = self.selection()[0]
+        self.delete(item)
+        self.deleted = item
+        self.event_generate("<<DeleteItem>>", data=item)
 
         return None
 
@@ -82,9 +109,37 @@ class Tree(TREEVIEW):
             self.insert("", tkinter.END, **s_item)
 
         # Set first item as selected
-        self.focus(items[0])
-        self.selection_set(items[0])
+        if items:
+            self.focus(items[0])
+            self.selection_set(items[0])
 
         return self
+
+    def add(self, item):
+        items = list(self.get_children())
+
+        # Remove all items from tree
+        self.delete(*items)
+
+        # Add new item in correct sorted order
+        items.append(item)
+        items.sort(reverse=self._order)
+        self.add_items(items)
+
+        return None
+
+    def sort(self):
+        self.heading("#0", text=self._headings[int(self._order)])
+        self._order = not self._order
+        items = list(self.get_children())
+
+        # Remove all items from tree
+        self.delete(*items)
+
+        # Sorts item list and add back to tree
+        items.sort(reverse=self._order)
+        self.add_items(items)
+
+        return None
 
 
