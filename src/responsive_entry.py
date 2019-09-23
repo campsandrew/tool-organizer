@@ -16,7 +16,6 @@ class ResponsiveEntry(ENTRY):
         # Class variable initializations
         self._root = root
         self._style = STYLE()
-        self.configuration = root.configuration
         self._default = default
 
         # Configure styles

@@ -27,7 +27,7 @@ class GUIMain(TK):
 
         # Root configuration
         self.title(name)
-        self.geometry("900x700")
+        self.geometry("1200x600")
 
         # Configure menu bar on root
         self.config(menu=self._menu)

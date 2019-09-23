@@ -16,24 +16,22 @@ class Tree(TREEVIEW):
     def __new__(cls, *args, **kwargs):
         return super().__new__(cls)
 
-    def __init__(self, root, headings=("Ascending, Decending"), addable=True,
-                 ascending=True, width=150, selectmode="browse",
-                 show="tree headings", pack={"side": "left", "fill": "y"},
-                 **kwargs):
+    def __init__(self, root, headings=["Decending", "Acending"], addable=True,
+                 decending=True, width=150, selectmode="browse",
+                 pack={"side": "left", "fill": "y"}, **kwargs):
 
         # Class variable initialization
         self._root = root
-        self._order = ascending
+        self._order = decending
         self._addable = addable
         self._headings = headings
-        self.configuration = root.configuration
         self.deleted = None
 
         # Create main frame to hold tree parts
         self._tree_frm = new_widget(root, FRAME, **{"pack": pack})
 
         # Create tree widget
-        options = {"pack": pack, "selectmode": selectmode, "show": show}
+        options = {"pack": pack, "selectmode": selectmode}
         new_widget(self._tree_frm, super(), **options, **kwargs)
 
         # Tree width configuration
@@ -60,6 +58,10 @@ class Tree(TREEVIEW):
 
     def _on_click(self, event):
         region = self.identify("region", event.x, event.y)
+
+        # Disable column resize for tree
+        if region == "separator":
+            return "break"
 
         # Sort tree if heading is clicked
         if region == "heading":

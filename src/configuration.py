@@ -94,21 +94,29 @@ class Configuration:
         return dates
 
     """
+    Loops through all history dates to find matching date.
+    Returns commands associated with that date
+    """
+    def get_history_commands(self, date):
+        return [hist.commands for hist in self._hist.history
+                if hist.date == date][-1]
+
+    """
     Returns the json format history that the command
     was inserted into
     """
     def add_history(self, command):
         date = datetime.date.today().strftime("%Y/%m/%d")
         time = datetime.datetime.now().strftime("%H:%M")
-        command_tup = (command, time)
+        command_pair = [command, time]
 
         # Determining if date exists in history or not
         if self._hist.history and date == self._hist.history[0].date:
-            self._hist.history[0].commands.insert(0, command_tup)
+            self._hist.history[0].commands.insert(0, command_pair)
         else:
             new_date = Map({
                 "date": date,
-                "commands": [command_tup]
+                "commands": [command_pair]
             })
             self._hist.history.insert(0, new_date)
 

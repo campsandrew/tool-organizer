@@ -15,11 +15,11 @@ NAME = "Tool Organizer - v" + __version__
 # TODO: Make tool settings have collapsable label frames
 # TODO: Make text entry for commands wrap
 # TODO: History tab showing scrollable table with command and time command was run.
-# TODO: Make table have a filterable columns ording by date/search
+# TODO: Make table have filterable column ording by date/search
 # TODO: Add live updating history when a command is entered on history page
 
 #### OTHER ####
-# TODO: Create consistancy in 
+# TODO: Create consistancy in file syntax and structure
 
 def main():
 

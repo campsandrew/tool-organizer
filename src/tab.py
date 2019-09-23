@@ -7,6 +7,7 @@ import tkinter.scrolledtext
 # Local Imports
 from utils import Map
 from tree import Tree
+from table import Table
 from utils import new_widget
 
 # Constant Defintions
@@ -16,12 +17,13 @@ SCROLLED_TEXT = tkinter.scrolledtext.ScrolledText
 
 class Tab(FRAME):
 
-    def __init__(self, root, tab_name, **kwargs):
+    def __init__(self, root, label, **kwargs):
 
         # Class variable initialization
         self._root = root
-        self._name = tab_name
+        self._tab_label = label
         self._tree = None
+        self._table = None
         self._scroll_text = None
         self._edit_save_btn = None
         self.tab_id = None
@@ -32,11 +34,11 @@ class Tab(FRAME):
         new_widget(root, super(), **kwargs)
 
         # Create specific tab based on tab key
-        if tab_name == self.configuration.DOC_TAB:
+        if label == self.configuration.DOC_TAB:
             self._create_doc_tab()
-        elif tab_name == self.configuration.HISTORY_TAB:
+        elif label == self.configuration.HISTORY_TAB:
             self._create_history_tab()
-        elif tab_name == self.configuration.SAVED_TAB:
+        elif label == self.configuration.SAVED_TAB:
             self._create_saved_tab()
         else:
             self._create_tool_tab()
@@ -77,19 +79,46 @@ class Tab(FRAME):
 
         return None
 
+    def _on_tree_select(self, event):
+        item = self._tree.selection()[0]
+
+        # Perform specific action for each tab to load items
+        # to page
+        if self._tab_label == self.configuration.DOC_TAB:
+            pass
+        elif self._tab_label == self.configuration.HISTORY_TAB:
+            commands = self.configuration.get_history_commands(item)
+
+            # Clear previous commands and add commnads to table
+            self._table.delete(*self._table.get_children())
+            self._table._add_items(commands)
+        elif self._tab_label == self.configuration.SAVED_TAB:
+            pass
+        else:
+            pass
+
+        return None
+
     def _create_saved_tab(self):
         return None
 
     def _create_history_tab(self):
 
-        # Adding tree to history tab
-        s_tree = {"headings": ("Latest", "Earliest"), "addable": False}
+        # Adding tree for history dates
+        s_tree = {"headings": ["Latest", "Earliest"], "addable": False}
         dates = self.configuration.get_history_dates()
         self._tree = Tree(self, **s_tree).add_items(dates)
 
+        # Adding command history table
+        s_table = {}
+        headings = [Map({"labels": ("Commands", None), "autosize": False}),
+                    Map({"labels": ("Latest", "Earliest"), "autosize": True})]
+        self._table = Table(self, headings, **s_table)
+
         # Tree bindings and variable traces
-        self._tree.bind("<<DeleteItem>>", self._on_delete_history)
-        self.var_map.new_history.trace("w", self._on_new_history)
+        self._tree.bind("<<TreeviewSelect>>", self._on_tree_select)
+        self._tree.bind("<<DeleteItem>>", self._on_delete_history) # TODO: make this a general functions for all tab types
+        self.var_map.new_history.trace("w", self._on_new_history)  # TODO: make this a general function for all tab types 
         
         return None
 
