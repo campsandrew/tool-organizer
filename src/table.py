@@ -85,4 +85,10 @@ class Table(TREEVIEW):
 
         return None
 
+    def add(self, item):
+        s_item = {"values": item}
+        self.insert("", tkinter.END, **s_item)
+        
+        return None
+
     

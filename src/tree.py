@@ -103,6 +103,12 @@ class Tree(TREEVIEW):
         self.deleted = item
         self.event_generate("<<DeleteItem>>", data=item)
 
+        # Set focus to new item in tree
+        items = self.get_children()
+        if items:
+            self.focus(items[0])
+            self.selection_set(items[0])
+
         return None
 
     def add_items(self, items):

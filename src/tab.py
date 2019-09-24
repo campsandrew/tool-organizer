@@ -76,6 +76,8 @@ class Tab(FRAME):
         # Add date to tree if new date
         if hist.date not in self._tree:
             self._tree.add(hist.date)
+        else:
+            self._table.add(hist.commands[0])
 
         return None
 
