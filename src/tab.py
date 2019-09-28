@@ -63,7 +63,8 @@ class Tab(FRAME):
         # Adding command history table
         s_table = {}
         headings = [Map({"labels": ("Commands", None), "autosize": False}),
-                    Map({"labels": ("Latest", "Earliest"), "autosize": True, "sort": True})]
+                    Map({"labels": ("Latest", "Earliest"), "autosize": True,
+                         "sort": True, "anchor": tkinter.LEFT})]
         self._table = Table(self, headings, **s_table)
 
         # Tree bindings and variable traces

@@ -30,6 +30,7 @@ class Table(TREEVIEW):
         self._order = decending
         self._addable = addable
         self._headings = headings
+        self._width_adjust = True
         self._font = tkinter.font.Font()
 
         # Create main frame to hold tree parts
@@ -87,8 +88,44 @@ class Table(TREEVIEW):
         return None
 
     def _on_configuration(self, event):
+        if not self._width_adjust: return None
+        sizes = [[] for c in self["columns"]]
+        self._width_adjust = False
+        total_width = event.width
+        fixed = []
 
-        print(event.width)
+        # Take heading text withs into account
+        for i, column in enumerate(self["columns"]):
+            w = self._font.measure(column) + 15
+            sizes[i].append(w)
+
+        # Loop through all items in table
+        for child in self.get_children():
+            item = self.item(child, "values")
+
+            # Loop through each columns in table
+            for i, _ in enumerate(self["columns"]):
+                w = self._font.measure(item[i]) + 15
+                sizes[i].append(w)
+
+        # Configure column widths autosized columns
+        sizes = [max(s) for s in sizes]
+        for i, size in enumerate(sizes):
+            heading = self._headings[i]
+
+            # Check if columns should be autosized
+            if not heading.autosize:
+                fixed.append(self["columns"][i])
+                continue
+
+            # Apply widths
+            total_width -= size
+            self.column(self["columns"][i], width=size, stretch=False)
+
+        # Set width of fixed size columns
+        total_width /= len(fixed)
+        for column in fixed:
+            self.column(column, width=int(total_width))
 
         return None
 
@@ -102,12 +139,6 @@ class Table(TREEVIEW):
         for item in items:
             s_item = {"values": item}
             self.insert("", tkinter.END, **s_item)
-
-            # TODO: Make function to do complex column width adjustment
-            #w, h = self._font.measure(item[-1]), self._font.metrics("linespace")
-            #m.append(w)
-
-        #self.column("#2", width=max(m))
 
         return None
 

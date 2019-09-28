@@ -11,15 +11,23 @@ __version__ = "1.0.0"
 
 NAME = "Tool Organizer - v" + __version__
 
-#### PRIORITY ####
+#### TAB ####
 # TODO: Make tool settings have collapsable label frames
-# TODO: Make text entry for commands wrap
-# TODO: History tab showing scrollable table with command and time command was run.
-# TODO: Make table have filterable column ording by date/search
 # TODO: Add live updating history when a command is entered on history page
 
-#### OTHER ####
-# TODO: Create consistancy in file syntax and structure
+#### TREE ####
+# TODO: Add and remove items in tree
+
+#### TABLE ####
+# TODO: Add text wrapping to cells with wrap is defined in headings maps
+# TODO: Column sorting based on which headings have sortable headings
+# TODO: Add and remove items from table
+
+#### RESPONSIVE ENTRY ####
+# TODO: Have text wrap if too long
+
+#### MISC ####
+
 
 def main():
 
