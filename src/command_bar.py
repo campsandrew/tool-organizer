@@ -14,22 +14,29 @@ LABEL = tkinter.ttk.Label
 BUTTON = tkinter.ttk.Button
 
 class CommandBar(FRAME):
+
+    # Constant Class Variables
     RUN_TEXT = "Run"
     SAVE_TEXT = "Save"
     CLEAR_TEXT = "Clear"
     COMMAND_DEFAULT_TEXT = "Enter Command"
 
+    #################
+    # Special Methods
+    #################
     def __init__(self, root, **kwargs):
 
-        # Class variable initializations
-        self._root = root
+        # Public Class Variables
         self.configuration = root.configuration
         self.var_map = root.var_map
+
+        # Private Class Variables
         self._run_btn = None
         self._save_btn = None
         self._clear_btn = None
         self._cmd_entry = None
         self._file_lb = None
+        self._root = root
 
         # Create main frame
         new_widget(root, super(), **kwargs)
@@ -43,13 +50,16 @@ class CommandBar(FRAME):
         self._add_actions()
 
         # Add event bindings
-        self._cmd_entry.bind("<Return>", lambda e: self._action_click(self.RUN_TEXT))
+        self._cmd_entry.bind("<Return>", lambda e: self._on_action_click(self.RUN_TEXT))
 
         return None
 
     def __call__(self):
         return self
 
+    #################
+    # Private Methods
+    #################
     def _add_actions(self):
         btn_texts = [self.RUN_TEXT, self.SAVE_TEXT, self.CLEAR_TEXT]
         btn_vars = [self._run_btn, self._save_btn, self._clear_btn]
@@ -70,16 +80,19 @@ class CommandBar(FRAME):
         for i in range(len(btn_vars)):
             s_btn = {"pack": {"side": "right", "padx": (5, 0)}, "text": btn_texts[i]}
             btn_vars[i] = new_widget(btn_frm, BUTTON, **s_btn)
-            btn_vars[i]["command"] = lambda text=btn_texts[i]: self._action_click(text)
+            btn_vars[i]["command"] = lambda text=btn_texts[i]: self._on_action_click(text)
 
         return None
 
+    #######################
+    # Event/Binding Methods
+    #######################
     def _on_filepath_change(self, *args):
         self._file_lb["text"] = self.var_map.filepath.get()
 
         return None
 
-    def _action_click(self, btn_text):
+    def _on_action_click(self, btn_text):
         cmd = self._cmd_entry.get()
         no_cmd = cmd == self.COMMAND_DEFAULT_TEXT
 
@@ -87,9 +100,11 @@ class CommandBar(FRAME):
         if btn_text == self.CLEAR_TEXT:
             self._cmd_entry.clear()
         elif btn_text == self.RUN_TEXT and not no_cmd:
-            hist = self.configuration.add_history(cmd) # TODO: Need to stringify this and save in variable
+            hist = self.configuration.add_history(cmd)
             self.var_map.new_history.set(json.dumps(hist))
             t_cmd = self.configuration.get_terminal_command()
+
+            # Execute commmand
             os.system(t_cmd.format(cmd))
         elif btn_text == self.SAVE_TEXT and not no_cmd:
             #TODO: Create popup to pick save location

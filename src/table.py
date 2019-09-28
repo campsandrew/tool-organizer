@@ -1,11 +1,12 @@
 import sys
 import tkinter
 import tkinter.ttk
+import tkinter.font
 
 # Local import
 from utils import new_widget
 
-# Constant Definitions
+# Constant Variables
 MENU = tkinter.Menu
 FRAME = tkinter.ttk.Frame
 TREEVIEW = tkinter.ttk.Treeview
@@ -13,6 +14,9 @@ SCROLLBAR = tkinter.ttk.Scrollbar
 
 class Table(TREEVIEW):
 
+    #################
+    # Special Methods
+    #################
     def __new__(cls, *args, **kwargs):
         return super().__new__(cls)
 
@@ -20,14 +24,13 @@ class Table(TREEVIEW):
                  decending=True, **kwargs):
 
         # Private class variable
+        self._table_frm = None
+        self._items = None
         self._root = root
         self._order = decending
         self._addable = addable
         self._headings = headings
-        self._table_frm = None
-
-        # Public class variables
-        self.configuration = root.configuration
+        self._font = tkinter.font.Font()
 
         # Create main frame to hold tree parts
         s_table_frm = {"pack": {"side": "right", "fill": "both", "expand": True}, "borderwidth": 5,
@@ -44,9 +47,13 @@ class Table(TREEVIEW):
 
         # Table event bindings
         self.bind("<Button-1>", self._on_click)
+        self.bind("<Configure>", self._on_configuration)
 
         return None
 
+    #################
+    # Private Methods
+    #################
     def _add_verticle_scroll(self):
         s_scroll = {"pack": {"side": "right", "fill": "y", "pady": 5,
                              "padx": (0, 5)},
@@ -67,6 +74,9 @@ class Table(TREEVIEW):
 
         return None
 
+    #######################
+    # Event/Binding Methods
+    #######################
     def _on_click(self, event):
         region = self.identify("region", event.x, event.y)
 
@@ -76,19 +86,36 @@ class Table(TREEVIEW):
 
         return None
 
-    def _add_items(self, items):
+    def _on_configuration(self, event):
+
+        print(event.width)
+
+        return None
+
+    ################
+    # Public Methods
+    ################
+    def add_items(self, items):
+        self._items = items
 
         # Add all items to table
         for item in items:
             s_item = {"values": item}
             self.insert("", tkinter.END, **s_item)
 
+            # TODO: Make function to do complex column width adjustment
+            #w, h = self._font.measure(item[-1]), self._font.metrics("linespace")
+            #m.append(w)
+
+        #self.column("#2", width=max(m))
+
         return None
 
+    # TODO: need to sort items after adding
     def add(self, item):
-        s_item = {"values": item}
-        self.insert("", tkinter.END, **s_item)
-        
+        #s_item = {"values": item}
+        #self.insert("", tkinter.END, **s_item)
+
         return None
 
     

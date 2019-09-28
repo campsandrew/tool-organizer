@@ -42,6 +42,9 @@ def new_widget(root, widget, **kw):
 
 class Map(dict):
 
+    #################
+    # Special Methods
+    #################
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -73,6 +76,9 @@ class Map(dict):
         super().__delitem__(key)
         del self.__dict__[key]
 
+    #######################
+    # Static Public Methods
+    #######################
     @staticmethod
     def recursive_map(mp):
         nomap = []

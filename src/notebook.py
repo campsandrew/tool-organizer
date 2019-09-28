@@ -6,25 +6,36 @@ import tkinter.ttk
 from tab import Tab
 from utils import new_widget
 
-# Constant Defintions
+# Constant Variables
 MENU = tkinter.Menu
 NOTEBOOK = tkinter.ttk.Notebook
 
 class Notebook(NOTEBOOK):
 
+    #################
+    # Special Methods
+    #################
     def __init__(self, root, **kwargs):
 
-        # Class variable initialization
-        self._root = root
+        # Public Class Variables
         self.configuration = root.configuration
         self.var_map = root.var_map
+        self.defaults = [
+            self.configuration.SAVED_TAB,
+            self.configuration.HISTORY_TAB,
+            self.configuration.DOC_TAB
+        ]
+
+        # Private Class Variables
+        self._root = root
         self._tabs = {}
 
         # Initialize notebook widget
         new_widget(root, super(), **kwargs)
 
         # Add tabs to notebook
-        for tab_name in self.configuration.get_tab_names():
+        tab_names = root.configuration.get_tab_names()
+        for tab_name in tab_names + self.defaults:
 
             # Create tab and add it to notebook
             tab = Tab(self, tab_name, **kwargs)
@@ -45,8 +56,15 @@ class Notebook(NOTEBOOK):
         
         return None
 
+    def __call__(self):
+        return self
+
+    #######################
+    # Event/Binding Methods
+    #######################
     def _on_tab_change(self, event):
-        tab_name = self._tabs[self.select()]
+        tab_id = self.select()
+        tab_name = self._tabs[tab_id]
         filepath = self.configuration.get_filepath(tab_name)
         self.var_map.filepath.set(filepath)
 
@@ -64,7 +82,7 @@ class Notebook(NOTEBOOK):
         self.select(self.tabs()[index])
 
         # Checks if tab can be deleted
-        if cur_tab not in self.configuration.DEFAULT_TABS:
+        if cur_tab not in self.defaults:
 
             # Create menu
             popup_menu = new_widget(self, MENU, **{"tearoff": 0})
@@ -88,6 +106,9 @@ class Notebook(NOTEBOOK):
 
         return None
 
+    ################
+    # Public Methods
+    ################
     def add_tool_tab(self, new_tab_name):
         self.configuration.add_user_tab(new_tab_name)
 
@@ -100,7 +121,7 @@ class Notebook(NOTEBOOK):
             self.forget(tab_id)
 
             # Find index where default tabs begin
-            if tab_order[-1] in self.configuration.DEFAULT_TABS \
+            if tab_order[-1] in self.defaults \
                     and insert_index is None:
                 insert_index = i
 

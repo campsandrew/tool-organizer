@@ -17,7 +17,6 @@ NAME = "Tool Organizer - v" + __version__
 # TODO: History tab showing scrollable table with command and time command was run.
 # TODO: Make table have filterable column ording by date/search
 # TODO: Add live updating history when a command is entered on history page
-# TODO: Need to start a unit testing framework possibly?
 
 #### OTHER ####
 # TODO: Create consistancy in file syntax and structure

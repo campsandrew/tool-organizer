@@ -7,7 +7,7 @@ from utils import Map
 from utils import load_json
 from utils import dump_json
 
-# Constant Definitions
+# Constant Variables
 HOME = os.path.expanduser("~")
 TORG_CONF_PATH = os.path.join(HOME, ".torg")
 TORG_DOC_FILE = os.path.join(TORG_CONF_PATH, "torg.doc")
@@ -16,15 +16,22 @@ TORG_CONF_FILE = os.path.join(TORG_CONF_PATH, "torg.conf")
 
 class Configuration:
 
-    # Class Constant Definitions
+    # Constant Class Variables
     SAVED_TAB = "Saved"
     HISTORY_TAB = "History"
     DOC_TAB = "Documentation"
-    DEFAULT_TABS = [SAVED_TAB, HISTORY_TAB, DOC_TAB]
 
+    #################
+    # Special Methods
+    #################
     def __init__(self):
         gen_funcs = [self._gen_doc_file, self._gen_hist_file, self._gen_conf_file]
         cfiles = [TORG_DOC_FILE, TORG_HIST_FILE, TORG_CONF_FILE]
+
+        # Private Class Variables
+        self._conf = None
+        self._hist = None
+        self._doc = None
 
         # Check for main config directory structure
         if not os.path.isdir(TORG_CONF_PATH):
@@ -47,6 +54,59 @@ class Configuration:
 
         return None
 
+    ########################
+    # Static Private Methods
+    ########################
+    @staticmethod
+    def _gen_conf_file(filepath):
+        conf = {
+            "filepath": filepath,
+            "os": {
+                "darwin": {
+                    "terminal_command": "osascript -e '\ntell application \"Terminal\"\n do script \"{}\"\n activate\n end tell'"
+                },
+                "linux": {
+                    "terminal_command": "knosole --hold -e /bin/bash -c \"{}; exec /bin/bash\""
+                }
+            },
+            "user_defined_tabs": []
+        }
+
+        #TODO: add all os systems into default config
+        #TODO: create page to configure os specific commands
+
+        # Creates file and writes json content
+        dump_json(filepath, conf)
+
+        return None
+
+    @staticmethod
+    def _gen_doc_file(filepath):
+        doc = {
+            "filepath": filepath,
+            "documentation": ""
+        }
+
+        # Creates file and writes json content
+        dump_json(filepath, doc)
+
+        return None
+
+    @staticmethod
+    def _gen_hist_file(filepath):
+        hist = {
+            "filepath": filepath,
+            "history": []
+        }
+
+        # Creates file and writes json content
+        dump_json(filepath, hist)
+
+        return None
+
+    ################
+    # Public Methods
+    ################
     def get_tab_names(self):
         tabs = []
 
@@ -54,7 +114,7 @@ class Configuration:
         for tab in self._conf.user_defined_tabs:
             tabs.append(tab.tab_name)
 
-        return tabs + self.DEFAULT_TABS
+        return tabs
 
     def get_terminal_command(self):
         t_cmd = None
@@ -77,15 +137,6 @@ class Configuration:
         else: filepath = self._conf.filepath
 
         return filepath
-
-    def edit_doc_file(self, documentation):
-        self._doc.documentation = documentation
-        dump_json(self._doc.filepath, self._doc)
-
-        return None
-
-    def read_doc_file(self):
-        return self._doc.documentation
 
     def get_history_dates(self):
         dates = [hist.date for hist in self._hist.history]
@@ -162,49 +213,11 @@ class Configuration:
 
         return None
 
-    @staticmethod
-    def _gen_conf_file(filepath):
-        conf = {
-            "filepath": filepath,
-            "os": {
-                "darwin": {
-                    "terminal_command": "osascript -e '\ntell application \"Terminal\"\n do script \"{}\"\n activate\n end tell'"
-                },
-                "linux": {
-                    "terminal_command": "knosole --hold -e /bin/bash -c \"{}; exec /bin/bash\""
-                }
-            },
-            "user_defined_tabs": []
-        }
-
-        #TODO: add all os systems into default config
-        #TODO: create page to configure os specific commands
-
-        # Creates file and writes json content
-        dump_json(filepath, conf)
+    def edit_doc_file(self, documentation):
+        self._doc.documentation = documentation
+        dump_json(self._doc.filepath, self._doc)
 
         return None
 
-    @staticmethod
-    def _gen_doc_file(filepath):
-        doc = {
-            "filepath": filepath,
-            "documentation": ""
-        }
-
-        # Creates file and writes json content
-        dump_json(filepath, doc)
-
-        return None
-
-    @staticmethod
-    def _gen_hist_file(filepath):
-        hist = {
-            "filepath": filepath,
-            "history": []
-        }
-
-        # Creates file and writes json content
-        dump_json(filepath, hist)
-
-        return None
+    def read_doc_file(self):
+        return self._doc.documentation

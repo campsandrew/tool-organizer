@@ -5,7 +5,7 @@ import tkinter.ttk
 # Local import
 from utils import new_widget
 
-# Constant Definitions
+# Constant Variables
 MENU = tkinter.Menu
 FRAME = tkinter.ttk.Frame
 TREEVIEW = tkinter.ttk.Treeview
@@ -13,6 +13,9 @@ SCROLLBAR = tkinter.ttk.Scrollbar
 
 class Tree(TREEVIEW):
 
+    #################
+    # Special Methods
+    #################
     def __new__(cls, *args, **kwargs):
         return super().__new__(cls)
 
@@ -21,11 +24,12 @@ class Tree(TREEVIEW):
                  pack={"side": "left", "fill": "y"}, **kwargs):
 
         # Class variable initialization
+        self._items = None
+        self.deleted = None
         self._root = root
         self._order = decending
         self._addable = addable
         self._headings = headings
-        self.deleted = None
 
         # Create main frame to hold tree parts
         self._tree_frm = new_widget(root, FRAME, **{"pack": pack})
@@ -48,6 +52,9 @@ class Tree(TREEVIEW):
     def __contains__(self, item):
         return item in self.get_children()
 
+    #################
+    # Private Methods
+    #################
     def _add_verticle_scroll(self):
         s_scroll = {"pack": {"side": "right", "fill": "y"},
                     "orient": "vertical", "command": self.yview}
@@ -56,6 +63,9 @@ class Tree(TREEVIEW):
 
         return None
 
+    #######################
+    # Event/Binding Methods
+    #######################
     def _on_click(self, event):
         region = self.identify("region", event.x, event.y)
 
@@ -96,7 +106,6 @@ class Tree(TREEVIEW):
         
         return None
 
-    # TODO: this needs to be implemented one level up (tab specific)
     def _on_item_delete(self):
         item = self.selection()[0]
         self.delete(item)
@@ -111,7 +120,11 @@ class Tree(TREEVIEW):
 
         return None
 
+    ################
+    # Public Methods
+    ################
     def add_items(self, items):
+        self._items = items
 
         # Loop through the items and add them to the tree
         for item in items:
@@ -119,9 +132,9 @@ class Tree(TREEVIEW):
             self.insert("", tkinter.END, **s_item)
 
         # Set first item as selected
-        if items:
-            self.focus(items[0])
-            self.selection_set(items[0])
+        if self._items:
+            self.focus(self._items[0])
+            self.selection_set(self._items[0])
 
         return self
 
@@ -135,6 +148,7 @@ class Tree(TREEVIEW):
         items.append(item)
         items.sort(reverse=self._order)
         self.add_items(items)
+        self._items = items
 
         return None
 

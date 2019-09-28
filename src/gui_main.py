@@ -7,23 +7,28 @@ from utils import Map
 from notebook import Notebook
 from command_bar import CommandBar
 
-# Constant Definitions
+# Constant Variables
 TK = tkinter.Tk
 
 class GUIMain(TK):
 
+    #################
+    # Special Methods
+    #################
     def __new__(cls, configuration, name):
         return super().__new__(cls)
 
     def __init__(self, config, name):
         super().__init__()
 
-        # Initialize class variables
+        # Public Class Variables
         self.configuration = config
         self.var_map = self._init_vars()
-        self._menu = tkinter.Menu(self)
+
+        # Private Class Variables
         self._notebook = None
         self._cmd_bar = None
+        self._menu = tkinter.Menu(self)
 
         # Root configuration
         self.title(name)
@@ -38,6 +43,9 @@ class GUIMain(TK):
     def __call__(self):
         return self
 
+    #################
+    # Private Methods
+    #################    
     def _init_vars(self):
         tvars = Map({
             "filepath": tkinter.StringVar(),
@@ -49,13 +57,10 @@ class GUIMain(TK):
         tvars.new_history.set("")
 
         return tvars
-
-    def _new_tab(self):
-
-        self._notebook.add_tool_tab("TODO")
-
-        return None
     
+    #######################
+    # Event/Binding Methods
+    #######################
     def _on_close(self):
 
         # Kill root window
@@ -63,11 +68,19 @@ class GUIMain(TK):
 
         return None
 
+    def _on_new_tab(self):
+        self._notebook.add_tool_tab("TODO")
+
+        return None
+
+    ################
+    # Public Methods
+    ################
     def execute(self):
 
         # Add menu dropdown
         file_menu = tkinter.Menu(self._menu, tearoff=0)
-        file_menu.add_command(label="New Tab", command=self._new_tab)
+        file_menu.add_command(label="New Tab", command=self._on_new_tab)
         self._menu.add_cascade(label="File", menu=file_menu)
 
         # Create main notebook displaying tabs

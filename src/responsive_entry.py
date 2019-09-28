@@ -5,15 +5,18 @@ import tkinter.ttk
 # Local Imports
 from utils import new_widget
 
-# Constant Definitions
+# Constant Variables
 ENTRY = tkinter.ttk.Entry
 STYLE = tkinter.ttk.Style
 
 class ResponsiveEntry(ENTRY):
 
+    #################
+    # Special Methods
+    #################
     def __init__(self, root, default="", **kwargs):
 
-        # Class variable initializations
+        # Private Class Variables
         self._root = root
         self._style = STYLE()
         self._default = default
@@ -34,6 +37,9 @@ class ResponsiveEntry(ENTRY):
 
         return None
 
+    #################
+    # Private Methods
+    #################
     def _entry_focus(self, event):
         text = self.get()
         is_default = text == self._default
@@ -50,6 +56,9 @@ class ResponsiveEntry(ENTRY):
 
         return None
 
+    ################
+    # Public Methods
+    ################
     def clear(self):
 
         # Send cursor to entry and delete
