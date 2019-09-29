@@ -24,9 +24,9 @@ class Tree(TREEVIEW):
                  pack={"side": "left", "fill": "y"}, **kwargs):
 
         # Class variable initialization
-        self._items = None
         self.deleted = None
         self._root = root
+        self._items = []
         self._order = decending
         self._addable = addable
         self._headings = headings
@@ -92,12 +92,11 @@ class Tree(TREEVIEW):
             popup_menu.add_command(label="Delete", command=self._on_item_delete)
             self.selection_set(item)
             self.focus(item)
+            self.update()
 
         # Cause menu to popup
-        try:
-            popup_menu.tk_popup(event.x_root, event.y_root + 30, 0)
-        finally:
-            popup_menu.grab_release()
+        try: popup_menu.tk_popup(event.x_root, event.y_root + 30, 0)
+        finally: popup_menu.grab_release()
 
         return None
 
@@ -110,7 +109,7 @@ class Tree(TREEVIEW):
         item = self.selection()[0]
         self.delete(item)
         self.deleted = item
-        self.event_generate("<<DeleteItem>>", data=item)
+        self.event_generate("<<DeleteItems>>")
 
         # Set focus to new item in tree
         items = self.get_children()
@@ -124,7 +123,7 @@ class Tree(TREEVIEW):
     # Public Methods
     ################
     def add_items(self, items):
-        self._items = items
+        self._items += items
 
         # Loop through the items and add them to the tree
         for item in items:

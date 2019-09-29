@@ -80,6 +80,7 @@ class Notebook(NOTEBOOK):
         index = self.index("@{},{}".format(event.x, event.y))
         cur_tab = self.tab(index, "text")
         self.select(self.tabs()[index])
+        self.update()
 
         # Checks if tab can be deleted
         if cur_tab not in self.defaults:
@@ -89,10 +90,8 @@ class Notebook(NOTEBOOK):
             popup_menu.add_command(label="Delete", command=self._on_tab_delete)
 
             # Cause menu to popup
-            try:
-                popup_menu.tk_popup(event.x_root, event.y_root + 30, 0)
-            finally:
-                popup_menu.grab_release()
+            try: popup_menu.tk_popup(event.x_root, event.y_root + 30, 0)
+            finally: popup_menu.grab_release()
 
         return None
 

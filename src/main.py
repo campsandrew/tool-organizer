@@ -3,31 +3,13 @@
 import os
 import sys
 
-# Local python file imports
+# Local Imports
 from gui_main import GUIMain
 from configuration import Configuration
 
 __version__ = "1.0.0"
 
 NAME = "Tool Organizer - v" + __version__
-
-#### TAB ####
-# TODO: Make tool settings have collapsable label frames
-# TODO: Add live updating history when a command is entered on history page
-
-#### TREE ####
-# TODO: Add and remove items in tree
-
-#### TABLE ####
-# TODO: Add text wrapping to cells with wrap is defined in headings maps
-# TODO: Column sorting based on which headings have sortable headings
-# TODO: Add and remove items from table
-
-#### RESPONSIVE ENTRY ####
-# TODO: Have text wrap if too long
-
-#### MISC ####
-
 
 def main():
 

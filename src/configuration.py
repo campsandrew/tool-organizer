@@ -187,13 +187,31 @@ class Configuration:
 
         return None
 
+    def delete_history_items(self, date, items):
+        
+        # Loop through all history dates and delete matching date
+        for i, hist in enumerate(self._hist.history):
+            if hist.date != date: continue
+            cmds = [tuple(cmd) for cmd in self._hist.history[i].commands]
+
+            # Delete all items in command history
+            for item in items:
+                del self._hist.history[i].commands[cmds.index(item)]
+
+            break
+
+        # Save history information to history file
+        dump_json(self._hist.filepath, self._hist)
+
+        return None
+
     def delete_history_date(self, date):
 
         # Loop through all history dates and delete matching date
         for i, hist in enumerate(self._hist.history):
-            if hist.date == date:
-                del self._hist.history[i]
-                break
+            if hist.date != date: continue
+            del self._hist.history[i]
+            break
 
         # Save history information to history file
         dump_json(self._hist.filepath, self._hist)

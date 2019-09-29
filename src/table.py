@@ -3,10 +3,12 @@ import tkinter
 import tkinter.ttk
 import tkinter.font
 
-# Local import
+# Local Imports
+from utils import Map
 from utils import new_widget
 
 # Constant Variables
+SIZE_BUFFER = 15
 MENU = tkinter.Menu
 FRAME = tkinter.ttk.Frame
 TREEVIEW = tkinter.ttk.Treeview
@@ -25,7 +27,9 @@ class Table(TREEVIEW):
 
         # Private class variable
         self._table_frm = None
-        self._items = None
+        self._sorted = None
+        self.deleted = None
+        self._items = []
         self._root = root
         self._order = decending
         self._addable = addable
@@ -48,6 +52,7 @@ class Table(TREEVIEW):
 
         # Table event bindings
         self.bind("<Button-1>", self._on_click)
+        self.bind("<Button-2>", self._on_right_click)
         self.bind("<Configure>", self._on_configuration)
 
         return None
@@ -70,7 +75,6 @@ class Table(TREEVIEW):
         # Add all headings to table
         for i, column in enumerate(self["columns"]):
             col_id = "#" + str(i + 1)
-            self._headings[i].col_id = col_id
             self.heading(col_id, text=column)
 
         return None
@@ -85,6 +89,47 @@ class Table(TREEVIEW):
         if region == "separator":
             return "break"
 
+        # Sort column when clicked on if sortable
+        # if region == "heading":
+        #     column = self.identify_column(event.x).split("#")[-1]
+        #     index = int(column) - 1
+
+        return None
+
+    def _on_right_click(self, event):
+        popup_menu = new_widget(self, MENU, **{"tearoff": 0})
+        item = self.identify_row(event.y)
+        items = self.selection()
+
+        # Create add menu button if table can be added to
+        if self._addable:
+            popup_menu.add_command(label="Add", command=self._on_item_add)
+        
+        # If user right clicked on a tree item
+        if items:
+            popup_menu.add_command(label="Delete", command=self._on_item_delete)
+        elif item:
+            popup_menu.add_command(label="Delete", command=self._on_item_delete)
+            self.selection_set(item)
+            self.focus(item)
+            self.update()
+        else: pass
+
+        # Cause menu to popup
+        try: popup_menu.tk_popup(event.x_root, event.y_root + 30, 0)
+        finally: popup_menu.grab_release()
+
+        return None
+
+    def _on_item_add(self):
+        return None
+
+    def _on_item_delete(self):
+        items = self.selection()
+        self.deleted = [self.item(item, "values") for item in items]
+        self.delete(*items)
+        self.event_generate("<<DeleteItems>>")
+
         return None
 
     def _on_configuration(self, event):
@@ -96,16 +141,15 @@ class Table(TREEVIEW):
 
         # Take heading text withs into account
         for i, column in enumerate(self["columns"]):
-            w = self._font.measure(column) + 15
+            w = self._font.measure(column) + SIZE_BUFFER
             sizes[i].append(w)
 
         # Loop through all items in table
-        for child in self.get_children():
-            item = self.item(child, "values")
+        for item in self._items:
 
             # Loop through each columns in table
-            for i, _ in enumerate(self["columns"]):
-                w = self._font.measure(item[i]) + 15
+            for i in range(len(item)):
+                w = self._font.measure(item[i]) + SIZE_BUFFER
                 sizes[i].append(w)
 
         # Configure column widths autosized columns
@@ -140,13 +184,47 @@ class Table(TREEVIEW):
             s_item = {"values": item}
             self.insert("", tkinter.END, **s_item)
 
-        return None
+        # Will reconfigure column withs for autosize columns
+        self._width_adjust = True
+        self._on_configuration(Map({"width": self.winfo_width()}))
 
-    # TODO: need to sort items after adding
+        return self
+
     def add(self, item):
-        #s_item = {"values": item}
-        #self.insert("", tkinter.END, **s_item)
+        s_item = {"values": item}
+        self.insert("", tkinter.END, **s_item)
+
+        # Will reconfigure column withs for autosize columns
+        self._width_adjust = True
+        self._on_configuration(Map({"width": self.winfo_width()}))
 
         return None
+
+    def sort(self, index):
+        heading = self._headings[index]
+
+        # Remove all items from tree
+        self.delete(*self.get_children())
+
+        # Get values of column being sorted
+        col_dict = {}
+        for item in self._items:
+            col_dict[item[index]] = item
+
+        # Sort the column
+        column = list(col_dict.keys())
+        column.sort(reverse=self._order)
+        self._items = [col_dict[item] for item in column]
+
+        # Add all items to table
+        for item in self._items:
+            s_item = {"values": item}
+            self.insert("", tkinter.END, **s_item)
+
+        # Swap the order of current sorted column
+        self._order = not self._order
+
+        return None
+
 
     
