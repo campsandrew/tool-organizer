@@ -198,6 +198,10 @@ class Configuration:
             for item in items:
                 del self._hist.history[i].commands[cmds.index(item)]
 
+            # If no command history left delete from file
+            if len(self._hist.history[i].commands) == 0:
+                del self._hist.history[i]
+
             break
 
         # Save history information to history file

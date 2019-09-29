@@ -22,8 +22,10 @@ class Table(TREEVIEW):
     def __new__(cls, *args, **kwargs):
         return super().__new__(cls)
 
-    def __init__(self, root, headings=[], addable=True,
-                 decending=True, **kwargs):
+    def __init__(self, root, headings=[], addable=True, decending=True,
+                 selectmode="extended", show="headings", boarderwidth=5,
+                 relief=tkinter.RAISED, pack={"side": "right", "fill": "both", "expand": True},
+                 **kwargs):
 
         # Private class variable
         self._table_frm = None
@@ -38,15 +40,15 @@ class Table(TREEVIEW):
         self._font = tkinter.font.Font()
 
         # Create main frame to hold tree parts
-        s_table_frm = {"pack": {"side": "right", "fill": "both", "expand": True}, "borderwidth": 5,
-                                "relief": tkinter.RAISED}
+        s_table_frm = {"pack": pack, "borderwidth": boarderwidth,
+                       "relief": relief}
         self._table_frm = new_widget(root, FRAME, **s_table_frm)
 
         # Create tree widget
         s_table = {"pack": {"side": "left", "fill": "both", "expand": True,
-                            "pady": 5, "padx": (5, 0)}, "selectmode": "extended",
-                   "show": "headings"}
-        new_widget(self._table_frm, super(), **s_table)
+                            "pady": 5, "padx": (5, 0)}, "selectmode": selectmode,
+                   "show": show}
+        new_widget(self._table_frm, super(), **s_table, **kwargs)
         self._add_verticle_scroll()
         self._add_headings()
 

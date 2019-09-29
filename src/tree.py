@@ -123,7 +123,7 @@ class Tree(TREEVIEW):
     # Public Methods
     ################
     def add_items(self, items):
-        self._items += items
+        self._items = items
 
         # Loop through the items and add them to the tree
         for item in items:

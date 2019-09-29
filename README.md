@@ -1,21 +1,20 @@
 --- BUGS ---
-Might be a bug when all items are deleted from a table and the columns are autosized
 
 --- TAB ---
-TODO: Make tool settings have collapsable label frames
+TODO: Tool settings with collapsable label frames
+TODO: Collapse all button
 
 --- TREE ---
-TODO: Add items in tree
+TODO: Add items to tree
 
 --- TABLE ---
-TODO: Add default options to init() method
 TODO: Add text wrapping to cells when wrap is defined in headings maps
 TODO: Sorting based on which headings have sortable headings
 TODO: Sort items after adding
-TODO: Add and remove items from table
+TODO: Add items to table
 
 --- RESPONSIVE ENTRY ---
-TODO: Have text wrap if too long
+TODO: Have text wrap if too long (next)
 
 --- MISC ---
 
