@@ -8,7 +8,7 @@ TODO: Collapse all button
 TODO: Add items to tree
 
 --- TABLE ---
-TODO: Add text wrapping to cells when wrap is defined in headings maps
+TODO: Add text wrapping to cells when cell is selected
 TODO: Sorting based on which headings have sortable headings
 TODO: Sort items after adding
 TODO: Add items to table
@@ -17,6 +17,7 @@ TODO: Add items to table
 TODO: Have text wrap if too long (next)
 
 --- MISC ---
+TODO: Rename repository to torg
 
 Sorting Problem Notes:
 Default column that is sorted has order label.
