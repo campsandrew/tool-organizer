@@ -9,7 +9,7 @@ from configuration import Configuration
 
 __version__ = "1.0.0"
 
-NAME = "Tool Organizer - v" + __version__
+NAME = "TOrg - v" + __version__
 
 def main():
 
