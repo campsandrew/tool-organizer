@@ -5,6 +5,7 @@ import tkinter
 import tkinter.ttk
 
 # Local Imports
+from utils import CallableFrame
 from utils import new_widget
 from responsive_entry import ResponsiveEntry
 
@@ -41,13 +42,9 @@ class CommandBar(FRAME):
         # Create main frame
         new_widget(root, super(), **kwargs)
 
-        #TODO: make entry wrap. Need to switch this to Text entry
-        # Add children to main frame
-        s_cmd_entry = {"pack": {"fill": "x", "pady": (0, 5)}, 
-                       "default": self.COMMAND_DEFAULT_TEXT}
-        self._cmd_entry = ResponsiveEntry(self, **s_cmd_entry)
-        self._cmd_entry.focus()
-        self._add_actions()
+        # Add command entry and action buttons
+        self._add_entry_section()
+        self._add_action_section()
 
         # Add event bindings
         self._cmd_entry.bind("<Return>", lambda e: self._on_action_click(self.RUN_TEXT))
@@ -60,9 +57,25 @@ class CommandBar(FRAME):
     #################
     # Private Methods
     #################
-    def _add_actions(self):
-        btn_texts = [self.RUN_TEXT, self.SAVE_TEXT, self.CLEAR_TEXT]
-        btn_vars = [self._run_btn, self._save_btn, self._clear_btn]
+    def _add_entry_section(self):
+        s_cmd_frm = {"pack": {"fill": "x"}}
+        s_cmd_entry = {"pack": {"fill": "x", "pady": (0, 5)}, 
+                       "default": self.COMMAND_DEFAULT_TEXT}
+        s_clear_btn = {"pack": {"side": "left", "pady": (0, 5)},
+                       "width": 0, "text": self.CLEAR_TEXT,
+                       "command": lambda: self._on_action_click(self.CLEAR_TEXT)}
+                       
+        #TODO: make entry wrap. Need to switch this to Text entry
+        # Add children to main frame
+        cmd_frm = new_widget(self, CallableFrame, **s_cmd_frm)
+        self._clear_btn = new_widget(cmd_frm, BUTTON, **s_clear_btn)
+        self._cmd_entry = ResponsiveEntry(cmd_frm, **s_cmd_entry)
+
+        return None
+
+    def _add_action_section(self):
+        btn_texts = [self.RUN_TEXT, self.SAVE_TEXT]
+        btn_vars = [self._run_btn, self._save_btn]
 
         # Adding layout frames
         s_action_frm = {"pack": {"fill": "x"}}

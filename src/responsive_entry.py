@@ -28,12 +28,14 @@ class ResponsiveEntry(ENTRY):
         # Create entry widget
         kwargs["style"] = "CommandDefault.TEntry"
         new_widget(root, super(), **kwargs)
-        self.insert(0, self._default)
+        self.insert(0, default)
 
         # Add event bindings to entry
         self.bind("<FocusIn>", self._entry_focus)
         self.bind("<FocusOut>", self._entry_focus)
-        #self.bind("<Return>", self._)
+
+        # Set focus to entry
+        self.focus()
 
         return None
 

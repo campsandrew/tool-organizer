@@ -1,7 +1,10 @@
 import sys
 import json
 import inspect
+import tkinter
+import tkinter.ttk
 
+FRAME = tkinter.ttk.Frame
 # LB = tkinter.ttk.Label
 # SBX = tkinter.ttk.Spinbox
 
@@ -39,6 +42,19 @@ def new_widget(root, widget, **kw):
     if grid: wdgt.grid(**grid)
 
     return wdgt
+
+class CallableFrame(FRAME):
+
+    #################
+    # Special Methods
+    #################
+    def __init__(self, root, **kwargs):
+        new_widget(root, super(), **kwargs)
+
+        return None
+
+    def __call__(self):
+        return self
 
 class Map(dict):
 
